@@ -7,8 +7,19 @@ app.use(express.json());
 
 app.post("/shopify-order", async (req, res) => {
 
+    console.log("========== SIPARIS ==========");
+
     console.log("ODEME:");
     console.log(req.body.financial_status);
+
+    console.log("MUSTERI:");
+    console.log(JSON.stringify(req.body.customer, null, 2));
+
+    console.log("ADRES:");
+    console.log(JSON.stringify(req.body.shipping_address, null, 2));
+
+    console.log("URUNLER:");
+    console.log(JSON.stringify(req.body.line_items, null, 2));
 
     console.log("KARGO:");
     console.log(JSON.stringify(req.body.shipping_lines, null, 2));
