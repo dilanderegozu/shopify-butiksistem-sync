@@ -31,9 +31,8 @@ app.get("/", (req, res) => {
     res.send("Çalışıyor");
 });
 
-app.get("/ara", async (req, res) => {
+app.get("/tumurunler", async (req, res) => {
     try {
-
         const result = await axios.post(
             "https://rema.butiksistem.com/rest/product/get",
             {
@@ -46,21 +45,10 @@ app.get("/ara", async (req, res) => {
             }
         );
 
-        const products = result.data.result.data;
-
-        const filtered = products.filter(product =>
-            product.name.toUpperCase().includes("VENED")
-        );
-
-        res.json(filtered);
+        res.json(result.data.result.data);
 
     } catch (err) {
-
-        console.error(err.response?.data || err.message);
-
-        res.status(500).json(
-            err.response?.data || err.message
-        );
+        res.status(500).json(err.response?.data || err.message);
     }
 });
 
