@@ -6,10 +6,16 @@ const app = express();
 app.use(express.json());
 
 app.post("/shopify-order", async (req, res) => {
-    console.log("Yeni Sipariş");
-    console.log(JSON.stringify(req.body, null, 2));
 
-    res.status(200).send("OK");
+    console.log("================================");
+    console.log("YENI SIPARIS GELDI");
+    console.log("================================");
+
+    console.log(JSON.stringify(req.body.line_items, null, 2));
+
+    res.status(200).json({
+        success: true
+    });
 });
 
 app.get("/", (req, res) => {
@@ -18,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.get("/ara", async (req, res) => {
     try {
+
         const result = await axios.post(
             "https://rema.butiksistem.com/rest/product/get",
             {
@@ -30,17 +37,20 @@ app.get("/ara", async (req, res) => {
             }
         );
 
-        const products = result.data.result.data;
+        console.log("BUTIK SISTEM CEVABI:");
+        console.log(JSON.stringify(result.data, null, 2));
 
-        const filtered = products.filter(product =>
-            product.name.toUpperCase().includes("ALİNA") ||
-            product.name.toUpperCase().includes("ASEL")
-        );
-
-        res.json(filtered);
+        res.json(result.data);
 
     } catch (err) {
-        res.status(500).json(err.response?.data || err.message);
+
+        console.error("HATA:");
+        console.error(err.response?.data || err.message);
+
+        res.status(500).json({
+            error: err.message,
+            details: err.response?.data || null
+        });
     }
 });
 
