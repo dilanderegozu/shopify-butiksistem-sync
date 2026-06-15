@@ -35,7 +35,7 @@ console.log("TELEFON:", phone);
 
         const cargoName =
             req.body.shipping_lines?.[0]?.title || "";
-
+console.log("KARGO ADI:", cargoName);
         let cargoCompanyId = "11";
         let cargoCompanyExtArgs = {
             company_id: "11",
