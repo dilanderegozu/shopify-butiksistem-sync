@@ -11,19 +11,21 @@ app.get("/", (req, res) => {
 
 app.post("/shopify-order", async (req, res) => {
     try {
-const phone = (req.body.shipping_address?.phone || "")
-    .replace(/\D/g, "")
-    .replace(/^0/, "");
-        
-console.log("TELEFON:", phone)
-console.log("CITY:", req.body.shipping_address?.city);
-console.log("PROVINCE:", req.body.shipping_address?.province);
-console.log("ADDRESS1:", req.body.shipping_address?.address1);
-console.log("ADDRESS2:", req.body.shipping_address?.address2);
-console.log("TELEFON:", phone);
+
+        const phone = (req.body.shipping_address?.phone || "")
+            .replace(/\D/g, "")
+            .replace(/^0/, "");
+
+        console.log("TELEFON:", phone);
+        console.log("CITY:", req.body.shipping_address?.city);
+        console.log("PROVINCE:", req.body.shipping_address?.province);
+        console.log("ADDRESS1:", req.body.shipping_address?.address1);
+        console.log("ADDRESS2:", req.body.shipping_address?.address2);
+
         console.log(
-    JSON.stringify(req.body.payment_gateway_names, null, 2)
-);
+            JSON.stringify(req.body.payment_gateway_names, null, 2)
+        );
+
         console.log("========== SIPARIS ==========");
         console.log("SHOPIFY ORDER ID:", req.body.id);
         console.log("ORDER NUMBER:", req.body.order_number);
@@ -35,8 +37,11 @@ console.log("TELEFON:", phone);
 
         const cargoName =
             req.body.shipping_lines?.[0]?.title || "";
-console.log("KARGO ADI:", cargoName);
+
+        console.log("KARGO ADI:", cargoName);
+
         let cargoCompanyId = "11";
+
         let cargoCompanyExtArgs = {
             company_id: "11",
             software_type: "1",
@@ -55,6 +60,18 @@ console.log("KARGO ADI:", cargoName);
             };
         }
 
+        const paymentName =
+            req.body.payment_gateway_names?.[0] || "";
+
+        let orderPaymentTypeId = 1;
+
+        if (paymentName.includes("Kapıda Kredi Kartı")) {
+            orderPaymentTypeId = 2;
+        }
+        else if (req.body.financial_status === "paid") {
+            orderPaymentTypeId = 6;
+        }
+
         const result = await axios.post(
             "https://rema.butiksistem.com/rest/order/add",
             {
@@ -64,20 +81,22 @@ console.log("KARGO ADI:", cargoName);
                 },
                 arguments: {
                     customOrderId: String(req.body.id),
+
                     orderDate: new Date()
                         .toISOString()
                         .split("T")[0],
 
-                    orderPaymentTypeId:
-                        req.body.financial_status === "paid"
-                            ? 6
-                            : 1,
+                    orderPaymentTypeId,
 
                     orderShippingValue:
-                        Number(req.body.total_shipping_price_set?.shop_money?.amount || 0),
+                        Number(
+                            req.body.total_shipping_price_set?.shop_money?.amount || 0
+                        ),
 
                     orderProductsValue:
-                        Number(req.body.current_subtotal_price || 0),
+                        Number(
+                            req.body.current_subtotal_price || 0
+                        ),
 
                     orderPaymentConfirmStat:
                         req.body.financial_status === "paid"
@@ -86,35 +105,60 @@ console.log("KARGO ADI:", cargoName);
 
                     orderStatusId: 3,
 
-                  delivery: {
-    name: req.body.shipping_address?.first_name || "",
-    surName: req.body.shipping_address?.last_name || "",
-    mail: req.body.customer?.email || "",
-    phone: phone,
-    address:
-        (req.body.shipping_address?.address1 || "") +
-        " " +
-        (req.body.shipping_address?.address2 || ""),
-    city: req.body.shipping_address?.city || "",
-    district: req.body.shipping_address?.address2 || "",
-    cargoCompanyId,
-    cargoCompanyExtArgs,
-    phoneCode: 90
-},
+                    delivery: {
+                        name:
+                            req.body.shipping_address?.first_name || "",
 
-                 billing: {
-    name: req.body.shipping_address?.first_name || "",
-    surName: req.body.shipping_address?.last_name || "",
-    mail: req.body.customer?.email || "",
-    phone: phone,
-    address:
-        (req.body.shipping_address?.address1 || "") +
-        " " +
-        (req.body.shipping_address?.address2 || ""),
-    city: req.body.shipping_address?.city || "",
-    district: req.body.shipping_address?.address2 || "",
-    phoneCode: 90
-},
+                        surName:
+                            req.body.shipping_address?.last_name || "",
+
+                        mail:
+                            req.body.customer?.email || "",
+
+                        phone: phone,
+
+                        address:
+                            (req.body.shipping_address?.address1 || "") +
+                            " " +
+                            (req.body.shipping_address?.address2 || ""),
+
+                        city:
+                            req.body.shipping_address?.city || "",
+
+                        district:
+                            req.body.shipping_address?.address2 || "",
+
+                        cargoCompanyId,
+                        cargoCompanyExtArgs,
+
+                        phoneCode: 90
+                    },
+
+                    billing: {
+                        name:
+                            req.body.shipping_address?.first_name || "",
+
+                        surName:
+                            req.body.shipping_address?.last_name || "",
+
+                        mail:
+                            req.body.customer?.email || "",
+
+                        phone: phone,
+
+                        address:
+                            (req.body.shipping_address?.address1 || "") +
+                            " " +
+                            (req.body.shipping_address?.address2 || ""),
+
+                        city:
+                            req.body.shipping_address?.city || "",
+
+                        district:
+                            req.body.shipping_address?.address2 || "",
+
+                        phoneCode: 90
+                    },
 
                     notification: {
                         sms: true
