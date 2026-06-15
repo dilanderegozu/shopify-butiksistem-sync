@@ -14,7 +14,12 @@ app.post("/shopify-order", async (req, res) => {
 const phone = (req.body.shipping_address?.phone || "")
     .replace(/\D/g, "")
     .replace(/^0/, "");
-
+        
+console.log("TELEFON:", phone)
+console.log("CITY:", req.body.shipping_address?.city);
+console.log("PROVINCE:", req.body.shipping_address?.province);
+console.log("ADDRESS1:", req.body.shipping_address?.address1);
+console.log("ADDRESS2:", req.body.shipping_address?.address2);
 console.log("TELEFON:", phone);
         console.log("========== SIPARIS ==========");
         console.log("SHOPIFY ORDER ID:", req.body.id);
