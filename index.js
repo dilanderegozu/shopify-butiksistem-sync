@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 
 const app = express();
 
@@ -14,6 +15,36 @@ app.post("/shopify-order", async (req, res) => {
 
 app.get("/", (req, res) => {
     res.send("Çalışıyor");
+});
+
+app.get("/ara", async (req, res) => {
+    try {
+
+        const result = await axios.post(
+            "https://rema.butiksistem.com/rest/product/get",
+            {
+                auth: {
+                    userName: process.env.BUTIK_USER,
+                    password: process.env.BUTIK_PASS
+                },
+                arguments: {},
+                responseType: "json"
+            }
+        );
+
+        const products = result.data.result.data;
+
+        const filtered = products.filter(product =>
+            product.name.toUpperCase().includes("ALİNA") ||
+            product.name.toUpperCase().includes("ASEL")
+        );
+
+        res.json(filtered);
+
+    } catch (err) {
+        console.error(err.response?.data || err.message);
+        res.status(500).json(err.response?.data || err.message);
+    }
 });
 
 app.listen(process.env.PORT || 3000);
