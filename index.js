@@ -11,7 +11,11 @@ app.get("/", (req, res) => {
 
 app.post("/shopify-order", async (req, res) => {
     try {
+const phone = (req.body.shipping_address?.phone || "")
+    .replace(/\D/g, "")
+    .replace(/^0/, "");
 
+console.log("TELEFON:", phone);
         console.log("========== SIPARIS ==========");
         console.log("SHOPIFY ORDER ID:", req.body.id);
         console.log("ORDER NUMBER:", req.body.order_number);
@@ -74,37 +78,35 @@ app.post("/shopify-order", async (req, res) => {
 
                     orderStatusId: 3,
 
-                    delivery: {
-                        name: req.body.shipping_address?.first_name || "",
-                        surName: req.body.shipping_address?.last_name || "",
-                        mail: req.body.customer?.email || "",
-                        phone: req.body.shipping_address?.phone || "",
-                        address:
-                            (req.body.shipping_address?.address1 || "") +
-                            " " +
-                            (req.body.shipping_address?.address2 || ""),
-                        city: req.body.shipping_address?.city || "",
-                        district:
-                            req.body.shipping_address?.address2 || "",
-                        cargoCompanyId,
-                        cargoCompanyExtArgs,
-                        phoneCode: 90
-                    },
+                  delivery: {
+    name: req.body.shipping_address?.first_name || "",
+    surName: req.body.shipping_address?.last_name || "",
+    mail: req.body.customer?.email || "",
+    phone: phone,
+    address:
+        (req.body.shipping_address?.address1 || "") +
+        " " +
+        (req.body.shipping_address?.address2 || ""),
+    city: req.body.shipping_address?.city || "",
+    district: req.body.shipping_address?.address2 || "",
+    cargoCompanyId,
+    cargoCompanyExtArgs,
+    phoneCode: 90
+},
 
-                    billing: {
-                        name: req.body.shipping_address?.first_name || "",
-                        surName: req.body.shipping_address?.last_name || "",
-                        mail: req.body.customer?.email || "",
-                        phone: req.body.shipping_address?.phone || "",
-                        address:
-                            (req.body.shipping_address?.address1 || "") +
-                            " " +
-                            (req.body.shipping_address?.address2 || ""),
-                        city: req.body.shipping_address?.city || "",
-                        district:
-                            req.body.shipping_address?.address2 || "",
-                        phoneCode: 90
-                    },
+                 billing: {
+    name: req.body.shipping_address?.first_name || "",
+    surName: req.body.shipping_address?.last_name || "",
+    mail: req.body.customer?.email || "",
+    phone: phone,
+    address:
+        (req.body.shipping_address?.address1 || "") +
+        " " +
+        (req.body.shipping_address?.address2 || ""),
+    city: req.body.shipping_address?.city || "",
+    district: req.body.shipping_address?.address2 || "",
+    phoneCode: 90
+},
 
                     notification: {
                         sms: true
