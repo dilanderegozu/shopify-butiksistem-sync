@@ -16,11 +16,14 @@ app.post("/shopify-order", async (req, res) => {
             .replace(/\D/g, "")
             .replace(/^0/, "");
 
-        console.log("TELEFON:", phone);
-        console.log("CITY:", req.body.shipping_address?.city);
-        console.log("PROVINCE:", req.body.shipping_address?.province);
-        console.log("ADDRESS1:", req.body.shipping_address?.address1);
-        console.log("ADDRESS2:", req.body.shipping_address?.address2);
+     console.log(
+    JSON.stringify(req.body.shipping_address, null, 2)
+);
+
+console.log("CITY:", req.body.shipping_address?.city);
+console.log("PROVINCE:", req.body.shipping_address?.province);
+console.log("ADDRESS1:", req.body.shipping_address?.address1);
+console.log("ADDRESS2:", req.body.shipping_address?.address2);
 
         console.log(
             JSON.stringify(req.body.payment_gateway_names, null, 2)
