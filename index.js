@@ -18,7 +18,6 @@ app.get("/", (req, res) => {
 
 app.get("/ara", async (req, res) => {
     try {
-
         const result = await axios.post(
             "https://rema.butiksistem.com/rest/product/get",
             {
@@ -31,16 +30,17 @@ app.get("/ara", async (req, res) => {
             }
         );
 
-        res.json(result.data);
+        const products = result.data.result.data;
+
+        const filtered = products.filter(product =>
+            product.name.toUpperCase().includes("ALİNA") ||
+            product.name.toUpperCase().includes("ASEL")
+        );
+
+        res.json(filtered);
 
     } catch (err) {
-
-        console.error("HATA:", err.response?.data || err.message);
-
-        res.status(500).json({
-            error: err.message,
-            details: err.response?.data || null
-        });
+        res.status(500).json(err.response?.data || err.message);
     }
 });
 
