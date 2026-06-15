@@ -83,7 +83,7 @@ try {
                 password: process.env.BUTIK_PASS
             },
             arguments: {
-               customOrderId: "SHOPIFY-TEST-2",
+               customOrderId: "SHOPIFY-" + Date.now(),
                 orderDate: "2026-06-15",
                 orderPaymentTypeId: 1,
                 orderShippingValue: 0,
