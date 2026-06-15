@@ -7,15 +7,13 @@ app.use(express.json());
 
 app.post("/shopify-order", async (req, res) => {
 
-    console.log("================================");
-    console.log("YENI SIPARIS GELDI");
-    console.log("================================");
+    console.log("ODEME:");
+    console.log(req.body.financial_status);
 
-    console.log(JSON.stringify(req.body.line_items, null, 2));
+    console.log("KARGO:");
+    console.log(JSON.stringify(req.body.shipping_lines, null, 2));
 
-    res.status(200).json({
-        success: true
-    });
+    res.status(200).json({ success: true });
 });
 
 app.get("/", (req, res) => {
