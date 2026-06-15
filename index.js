@@ -46,20 +46,21 @@ app.get("/ara", async (req, res) => {
             }
         );
 
-        console.log("BUTIK SISTEM CEVABI:");
-        console.log(JSON.stringify(result.data, null, 2));
+        const products = result.data.result.data;
 
-        res.json(result.data);
+        const filtered = products.filter(product =>
+            product.name.toUpperCase().includes("VENED")
+        );
+
+        res.json(filtered);
 
     } catch (err) {
 
-        console.error("HATA:");
         console.error(err.response?.data || err.message);
 
-        res.status(500).json({
-            error: err.message,
-            details: err.response?.data || null
-        });
+        res.status(500).json(
+            err.response?.data || err.message
+        );
     }
 });
 
