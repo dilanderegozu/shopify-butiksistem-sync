@@ -51,7 +51,15 @@ app.get("/tumurunler", async (req, res) => {
         res.status(500).json(err.response?.data || err.message);
     }
 });
+app.post("/shopify-order", async (req, res) => {
 
+    console.log("========== SIPARIS ==========");
+
+    console.log("SHOPIFY ORDER ID:", req.body.id);
+    console.log("ORDER NUMBER:", req.body.order_number);
+
+    ...
+});
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server çalışıyor");
 });
