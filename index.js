@@ -6,7 +6,6 @@ const app = express();
 app.use(express.json());
 
 app.post("/shopify-order", async (req, res) => {
-
     console.log("Yeni Sipariş");
     console.log(JSON.stringify(req.body, null, 2));
 
@@ -32,19 +31,19 @@ app.get("/ara", async (req, res) => {
             }
         );
 
-        const products = result.data.result.data;
-
-        const filtered = products.filter(product =>
-            product.name.toUpperCase().includes("ALİNA") ||
-            product.name.toUpperCase().includes("ASEL")
-        );
-
-        res.json(filtered);
+        res.json(result.data);
 
     } catch (err) {
-        console.error(err.response?.data || err.message);
-        res.status(500).json(err.response?.data || err.message);
+
+        console.error("HATA:", err.response?.data || err.message);
+
+        res.status(500).json({
+            error: err.message,
+            details: err.response?.data || null
+        });
     }
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Server çalışıyor");
+});
