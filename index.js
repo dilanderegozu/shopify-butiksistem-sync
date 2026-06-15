@@ -21,6 +21,9 @@ console.log("PROVINCE:", req.body.shipping_address?.province);
 console.log("ADDRESS1:", req.body.shipping_address?.address1);
 console.log("ADDRESS2:", req.body.shipping_address?.address2);
 console.log("TELEFON:", phone);
+        console.log(
+    JSON.stringify(req.body.payment_gateway_names, null, 2)
+);
         console.log("========== SIPARIS ==========");
         console.log("SHOPIFY ORDER ID:", req.body.id);
         console.log("ORDER NUMBER:", req.body.order_number);
